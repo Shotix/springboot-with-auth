@@ -37,6 +37,11 @@ This repository provides a starting point for a Spring Boot backend application 
 - Maven
 - MongoDB
 
+### Install and Configure MongoDB
+
+To be able to run the application, you need to have MongoDB installed on your system. You can download and install MongoDB Community from the official website: [MongoDB](https://www.mongodb.com/try/download/community).
+It is advisable to create a new database and user for the application. You can do this via the MongoDB Compass application. The database name and user credentials should be added to the `application.properties` or `application.yml` file.
+
 ### Installation
 
 1. **Clone the repository**:
