@@ -28,7 +28,7 @@ public class AuthenticationService {
             return jwtUtil.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
         } catch (AuthenticationException e) {
             log.error("Authentication failed for user: {}", user.getUsername());
-            throw new BadCredentialsException("Credentials Incorrect");
+            throw new BadCredentialsException("user.login.credentials.invalid");
         }
     }
     

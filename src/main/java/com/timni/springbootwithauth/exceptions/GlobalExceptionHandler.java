@@ -1,5 +1,7 @@
 package com.timni.springbootwithauth.exceptions;
 
+import com.timni.springbootwithauth.exceptions.types.UserNotEnabledException;
+import com.timni.springbootwithauth.exceptions.types.UsernameNotUniqueException;
 import com.timni.springbootwithauth.responses.base.ApiErrorDetails;
 import com.timni.springbootwithauth.responses.base.ApiErrorResponse;
 import lombok.RequiredArgsConstructor;
@@ -189,5 +191,37 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         return ResponseEntity.status(BAD_REQUEST).body(apiErrorResponse);
+    }
+    
+    
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(UsernameNotUniqueException.class)
+    public ResponseEntity<ApiErrorResponse> handleUsernameNotUniqueException(
+            final UsernameNotUniqueException ex, WebRequest request) {
+        log.info(ex.getMessage(), ex);
+        
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .statusCode(BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .instance(request.getDescription(false))
+                .build();
+        
+        return ResponseEntity.status(BAD_REQUEST).body(apiErrorResponse);
+    }
+    
+    
+    @ResponseStatus(UNAUTHORIZED)
+    @ExceptionHandler(UserNotEnabledException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserNotEnabledException(
+            final UserNotEnabledException ex, WebRequest request) {
+        log.info(ex.getMessage(), ex);
+        
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .statusCode(UNAUTHORIZED.value())
+                .message(ex.getMessage())
+                .instance(request.getDescription(false))
+                .build();
+        
+        return ResponseEntity.status(UNAUTHORIZED).body(apiErrorResponse);
     }
 }

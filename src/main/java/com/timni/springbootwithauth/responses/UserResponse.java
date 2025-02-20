@@ -1,4 +1,7 @@
 package com.timni.springbootwithauth.responses;
 
-public record UserResponse() {
+public record UserResponse(
+        String username,
+        String email
+) {
 }

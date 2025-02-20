@@ -1,6 +1,7 @@
 package com.timni.springbootwithauth.infra.auth.providers;
 
 import com.timni.springbootwithauth.entities.User;
+import com.timni.springbootwithauth.exceptions.types.UserNotEnabledException;
 import com.timni.springbootwithauth.repositories.UserRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -32,6 +33,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty() || passwordEncoder.matches(password, user.get().getPassword())) {
             return null;
+        }
+
+        if (!user.get().isEnabled()) {
+            throw new UserNotEnabledException("user.not.enabled");
         }
 
         UserDetails userDetails = new MyUserPrincipal(user.get());
