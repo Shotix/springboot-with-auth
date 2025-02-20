@@ -18,7 +18,7 @@ This repository provides a starting point for a Spring Boot backend application 
 
 ## Technologies Used
 
-- **Java 23**
+- **Java 23 (For now only features up to Java 17 can be used)**
 - **Spring Boot 3.4.2**
 - **Maven**
 - **MongoDB**
@@ -33,7 +33,7 @@ This repository provides a starting point for a Spring Boot backend application 
 
 ### Prerequisites
 
-- Java 23
+- Java 23 (17)
 - Maven
 - MongoDB
 
@@ -66,28 +66,28 @@ The application can be configured using the `application.properties` or `applica
 
 ### Endpoints
 
-- **User Registration**: `POST /api/auth/register`
-- **User Login**: `POST /api/auth/login`
-- **Protected Endpoint**: `GET /api/protected` (Requires JWT token)
+- **User Registration**: `POST /api/v1/users/register`
+- **User Login**: `POST /api/v1/user/login`
+- **Protected Endpoint**: `GET /api/v1/users/me` (Requires JWT token --> Get's personal user data)
 
 ### Example Requests
 
 #### User Registration
 
 ```sh
-curl -X POST http://localhost:8080/api/auth/register -H "Content-Type: application/json" -d '{"username": "testuser", "password": "password"}'
+curl -X POST http://localhost:8080/api/v1/users/register -H "Content-Type: application/json" -d '{"username": "testuser", "password": "password"}'
 ```
 
 #### User Login
 
 ```sh
-curl -X POST http://localhost:8080/api/auth/login -H "Content-Type: application/json" -d '{"username": "testuser", "password": "password"}'
+curl -X POST http://localhost:8080/api/v1/users/login -H "Content-Type: application/json" -d '{"username": "testuser", "password": "password"}'
 ```
 
 ### Access Protected Endpoint
 
 ```sh
-curl -X GET http://localhost:8080/api/protected -H "Authorization: Bearer <your_jwt_token>"
+curl -X GET http://localhost:8080/api/v1/users/me -H "Authorization: Bearer <your_jwt_token>"
 ```
 
 ## License
