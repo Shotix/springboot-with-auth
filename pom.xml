@@ -174,6 +174,12 @@
             <artifactId>java-uuid-generator</artifactId>
             <version>${java-uuid-generator.version}</version>
         </dependency>
+        
+        <!-- JWT Secret Generation -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
 
         <!-- Development tools -->
         <dependency>
@@ -181,8 +187,6 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
