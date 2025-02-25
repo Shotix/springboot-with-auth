@@ -111,3 +111,4 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 - [Lombok](https://projectlombok.org/)
 - [MapStruct](https://mapstruct.org/)
 - [Apache Commons](https://commons.apache.org/)
+- [Backend Architecture Inspired by Jojoooo1](https://github.com/Jojoooo1/project-assignment)
