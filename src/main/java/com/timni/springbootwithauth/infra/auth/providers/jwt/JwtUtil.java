@@ -1,6 +1,7 @@
 package com.timni.springbootwithauth.infra.auth.providers.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -19,6 +20,9 @@ public class JwtUtil {
 
     @Value("${jwt.secret}")
     private String secret;
+
+    @Value("${jwt.refreshSecret}")
+    private String refreshSecret;
 
 
     public String extractUsername(String token) {
@@ -47,16 +51,39 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername());
     }
+    
+    public String generateRefreshToken(UserDetails userDetails) {
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // 7 days
+                .signWith(Keys.hmacShaKeyFor(refreshSecret.getBytes()))
+                .compact();
+    } 
 
     private String createToken(Map<String, Object> claims, String subject) {
         Key key = Keys.hmacShaKeyFor(secret.getBytes());
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 10)) // 10 days
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 1 day
                 .signWith(key, SignatureAlgorithm.HS256).compact();
+    }
+    
+    public Key getRefreshTokenSecret() {
+        return Keys.hmacShaKeyFor(refreshSecret.getBytes());
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    
+    public Boolean validateRefreshToken(String token) {
+        try {
+            Key key = Keys.hmacShaKeyFor(refreshSecret.getBytes());
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }
