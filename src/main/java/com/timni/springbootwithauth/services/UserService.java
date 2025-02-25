@@ -38,6 +38,10 @@ public class UserService extends BaseService<User, String> {
         return userRepository.findByUsername(username);
     }
 
+    public Optional<User> findByEmail(final String email) {
+        return userRepository.findByEmail(email);
+    }
+    
     public User getAuthenticatedUser(Authentication authentication) {
         return findByUsername(authentication.getName()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
