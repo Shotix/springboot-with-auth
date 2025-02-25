@@ -3,6 +3,7 @@ package com.timni.springbootwithauth.services;
 import com.timni.springbootwithauth.entities.User;
 import com.timni.springbootwithauth.infra.auth.providers.MyUserDetailsService;
 import com.timni.springbootwithauth.infra.auth.providers.jwt.JwtUtil;
+import com.timni.springbootwithauth.responses.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,10 +23,16 @@ public class AuthenticationService {
     private final MyUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     
-    public String authenticate(User user) {
+    public AuthenticationResponse authenticate(User user) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            return jwtUtil.generateToken(userDetailsService.loadUserByUsername(user.getUsername()));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+            );
+            
+            var userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            String accessToken = jwtUtil.generateToken(userDetails);
+            String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+            return new AuthenticationResponse(accessToken, refreshToken);
         } catch (AuthenticationException e) {
             log.error("Authentication failed for user: {}", user.getUsername());
             throw new BadCredentialsException("user.login.credentials.invalid");
