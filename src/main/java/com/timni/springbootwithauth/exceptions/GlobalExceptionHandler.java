@@ -1,5 +1,6 @@
 package com.timni.springbootwithauth.exceptions;
 
+import com.timni.springbootwithauth.exceptions.types.EmailNotUniqueException;
 import com.timni.springbootwithauth.exceptions.types.UserNotEnabledException;
 import com.timni.springbootwithauth.exceptions.types.UsernameNotUniqueException;
 import com.timni.springbootwithauth.responses.base.ApiErrorDetails;
@@ -206,6 +207,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .instance(request.getDescription(false))
                 .build();
         
+        return ResponseEntity.status(BAD_REQUEST).body(apiErrorResponse);
+    }
+
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(EmailNotUniqueException.class)
+    public ResponseEntity<ApiErrorResponse> handleEmailNotUniqueException(
+            final EmailNotUniqueException ex, WebRequest request) {
+        log.info(ex.getMessage(), ex);
+
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .statusCode(BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .instance(request.getDescription(false))
+                .build();
+
         return ResponseEntity.status(BAD_REQUEST).body(apiErrorResponse);
     }
     
