@@ -45,7 +45,7 @@ public class UserController extends BaseController<
     private final UserMapper mapper;
     private final AuthenticationService authenticationService;
 
-
+    // TODO: Move to AuthenticationController
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<String>> register(
@@ -77,6 +77,7 @@ public class UserController extends BaseController<
         return ResponseBuilder.created("User registered successfully", authResponse.accessToken());
     }
 
+    // TODO: Move to AuthenticationController
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<String>> login(
@@ -110,7 +111,7 @@ public class UserController extends BaseController<
     }
 
 
-    private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+    public void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
         refreshCookie.setHttpOnly(true);
         refreshCookie.setSecure(false); // TODO: SET THIS TO TRUE IN PRODUCTION SO THAT THE COOKIE IS ONLY SENT OVER HTTPS.
