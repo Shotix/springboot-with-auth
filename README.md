@@ -64,11 +64,31 @@ It is advisable to create a new database and user for the application. You can d
 
 The application can be configured using the `application.properties` or `application.yml` file located in the `src/main/resources` directory.
 
+### Authentication System
+
+The application uses a dual token system for authentication:
+- **authToken**: Used for accessing protected endpoints.
+- **refreshToken**: Stored as a secure cookie and used to generate new `authToken` when it expires. The `refreshToken` is invalidated and regenerated upon use.
+
+### Guide for Users
+
+1. **Change the JWT Secrets**:
+   - Use the `JwtSecretGenerator` to generate new secrets.
+   - Update the secrets in the `application.properties` or `application.yml` file.
+
+    ```sh
+    java -jar JwtSecretGenerator.jar
+    ```
+
+2. **Switch Cookie Settings to Secure**:
+   - Ensure that the `refreshToken` cookie settings are set to `secure`. Currently this needs to be done manually in the specific code blocks.
+
 ### Endpoints
 
 - **User Registration**: `POST /api/v1/users/register`
 - **User Login**: `POST /api/v1/user/login`
-- **Protected Endpoint**: `GET /api/v1/users/me` (Requires JWT token --> Get's personal user data)
+- **Refresh Token**: `POST /api/v1/auth/refresh` (Required valid refresh token)
+- **Protected Endpoint**: `GET /api/v1/users/me` (Requires JWT token --> Gets personal user data)
 
 ### Example Requests
 
@@ -84,7 +104,13 @@ curl -X POST http://localhost:8080/api/v1/users/register -H "Content-Type: appli
 curl -X POST http://localhost:8080/api/v1/users/login -H "Content-Type: application/json" -d '{"username": "testuser", "password": "password"}'
 ```
 
-### Access Protected Endpoint
+#### Refresh Token
+
+```sh
+curl -X POST http://localhost:8080/api/v1/auth/refresh -H "Cookie: refreshToken=<your_refresh_token>"
+```
+
+#### Access Protected Endpoint
 
 ```sh
 curl -X GET http://localhost:8080/api/v1/users/me -H "Authorization: Bearer <your_jwt_token>"
