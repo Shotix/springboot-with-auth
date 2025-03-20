@@ -1,6 +1,7 @@
 package com.timni.springbootwithauth.controllers;
 
 import com.timni.springbootwithauth.constants.AppUrls;
+import com.timni.springbootwithauth.constants.CookieConstants;
 import com.timni.springbootwithauth.constants.UserConstants;
 import com.timni.springbootwithauth.controllers.base.BaseController;
 import com.timni.springbootwithauth.entities.User;
@@ -19,6 +20,7 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +46,8 @@ public class UserController extends BaseController<
     private final UserService service;
     private final UserMapper mapper;
     private final AuthenticationService authenticationService;
+    private final CookieConstants cookieConstants;
+    
 
     // TODO: Move to AuthenticationController
     @ResponseStatus(HttpStatus.CREATED)
@@ -112,11 +116,11 @@ public class UserController extends BaseController<
 
 
     public void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
-        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setSecure(false); // TODO: SET THIS TO TRUE IN PRODUCTION SO THAT THE COOKIE IS ONLY SENT OVER HTTPS.
-        refreshCookie.setPath("/");
-        refreshCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days expiration.
+        Cookie refreshCookie = new Cookie(cookieConstants.getRefreshTokenCookieName(), refreshToken);
+        refreshCookie.setHttpOnly(cookieConstants.isRefreshTokenCookieHttpOnly());
+        refreshCookie.setSecure(cookieConstants.isRefreshTokenCookieSecure());
+        refreshCookie.setPath(cookieConstants.getRefreshTokenCookiePath());
+        refreshCookie.setMaxAge(cookieConstants.getRefreshTokenCookieMaxAge());
         response.addCookie(refreshCookie);
     }
 }

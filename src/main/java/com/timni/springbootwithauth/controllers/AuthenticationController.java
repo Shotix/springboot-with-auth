@@ -1,6 +1,7 @@
 package com.timni.springbootwithauth.controllers;
 
 import com.timni.springbootwithauth.constants.AppUrls;
+import com.timni.springbootwithauth.constants.CookieConstants;
 import com.timni.springbootwithauth.entities.RefreshToken;
 import com.timni.springbootwithauth.infra.auth.providers.MyUserDetailsService;
 import com.timni.springbootwithauth.infra.auth.providers.jwt.JwtUtil;
@@ -39,6 +40,7 @@ public class AuthenticationController {
     private final MyUserDetailsService userDetailsService;
     private final RefreshTokenService refreshTokenService;
     private final UserService userService;
+    private final CookieConstants cookieConstants;
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
@@ -80,13 +82,13 @@ public class AuthenticationController {
                     LocalDateTime newExpiryDate = newExpiry.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                     
                     refreshTokenService.createRefreshToken(user.getId(), newRefreshToken, newExpiryDate);
-                    
-                    Cookie newCookie = new Cookie("refreshToken", newRefreshToken);
-                    newCookie.setHttpOnly(true);
-                    newCookie.setSecure(false); // TODO: Set to true in production
-                    newCookie.setPath("/");
-                    newCookie.setMaxAge(7 * 24 * 60 * 60);
-                    response.addCookie(newCookie);
+
+                    Cookie refreshCookie = new Cookie(cookieConstants.getRefreshTokenCookieName(), newRefreshToken);
+                    refreshCookie.setHttpOnly(cookieConstants.isRefreshTokenCookieHttpOnly());
+                    refreshCookie.setSecure(cookieConstants.isRefreshTokenCookieSecure());
+                    refreshCookie.setPath(cookieConstants.getRefreshTokenCookiePath());
+                    refreshCookie.setMaxAge(cookieConstants.getRefreshTokenCookieMaxAge());
+                    response.addCookie(refreshCookie);
 
                     return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
                 }
