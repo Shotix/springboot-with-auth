@@ -15,6 +15,8 @@ public class User extends BaseDocument<String> {
     private String email;
     private String username;
     private String password;
+    
+    private UserSettings userSettings;
 
     private Set<UserRoles> roles;
 
