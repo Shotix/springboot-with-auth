@@ -48,7 +48,7 @@ public class AuthenticationController {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("refreshToken".equals(cookie.getName())) {
+                if (cookieConstants.getRefreshTokenCookieName().equals(cookie.getName())) {
                     String refreshTokenStr = cookie.getValue();
                     
                     if (!jwtUtil.validateRefreshToken(refreshTokenStr)) {

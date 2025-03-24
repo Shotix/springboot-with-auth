@@ -5,6 +5,7 @@ import com.timni.springbootwithauth.constants.CookieConstants;
 import com.timni.springbootwithauth.constants.UserConstants;
 import com.timni.springbootwithauth.controllers.base.BaseController;
 import com.timni.springbootwithauth.entities.User;
+import com.timni.springbootwithauth.entities.UserSettings;
 import com.timni.springbootwithauth.exceptions.types.EmailNotUniqueException;
 import com.timni.springbootwithauth.exceptions.types.UsernameNotUniqueException;
 import com.timni.springbootwithauth.mappers.UserMapper;
@@ -70,6 +71,11 @@ public class UserController extends BaseController<
         user.setRoles(UserConstants.DEFAULT_ROLES);
         user.setEnabled(true);
         user.setPassword(authenticationService.hashPassword(user.getPassword()));
+
+        UserSettings settings = new UserSettings();
+        settings.setTwoFactorEnabled(false);
+        
+        user.setUserSettings(settings);
         User createdUser = service.create(user);
 
         // Generate both access and refresh tokens.
