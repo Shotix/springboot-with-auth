@@ -2,23 +2,23 @@
 
 ## Overview
 
-This repository provides a starting point for a Spring Boot backend application with integrated JWT authentication using `UsernamePasswordAuthentication`. It includes basic user login and registration functionalities.
+This repository offers a starting point for a Spring Boot backend application featuring JWT authentication. It includes user login, registration processes, and secure token management. The project uses Spring Security along with a dual token system.
 
 ## Features
 
-- **Spring Boot**: A robust framework for building Java applications.
-- **JWT Authentication**: Secure authentication mechanism using JSON Web Tokens.
-- **User Login/Registration**: Basic endpoints for user management.
-- **MongoDB**: Integration with MongoDB for data storage.
-- **Validation**: Input validation using Spring Boot's validation starter.
-- **Actuator**: Monitoring and management of the application.
-- **Security**: Spring Security for securing the application.
-- **Logging**: Logstash encoder for structured logging.
-- **Utilities**: Various utility libraries for common tasks.
+- **Spring Boot**: Robust framework for building Java applications.
+- **JWT Authentication**: Secure mechanism using JSON Web Tokens.
+- **User Login/Registration**: Endpoints to manage user credentials.
+- **MongoDB Integration**: Data storage powered by MongoDB.
+- **Input Validation**: Managed through Spring Boot's validation starter.
+- **Actuator**: Application monitoring and management.
+- **Spring Security**: Securing endpoints and controlling access.
+- **Structured Logging**: Logstash encoder for improved log management.
+- **Utility Libraries**: Common utilities for simplified coding tasks.
 
 ## Technologies Used
 
-- **Java 23 (For now only features up to Java 17 can be used)**
+- **Java 23** (Note: currently, only features up to Java 17 are utilized)
 - **Spring Boot 3.4.2**
 - **Maven**
 - **MongoDB**
@@ -29,20 +29,20 @@ This repository provides a starting point for a Spring Boot backend application 
 - **Apache Commons**
 - **CycloneDX**
 
-## Getting Started
+## Prerequisites
 
-### Prerequisites
-
-- Java 23 (17)
+- Java 23 (or Java 17 for current feature support)
 - Maven
 - MongoDB
 
+## Setup Instructions
+
 ### Install and Configure MongoDB
 
-To be able to run the application, you need to have MongoDB installed on your system. You can download and install MongoDB Community from the official website: [MongoDB](https://www.mongodb.com/try/download/community).
-It is advisable to create a new database and user for the application. You can do this via the MongoDB Compass application. The database name and user credentials should be added to the `application.properties` or `application.yml` file.
+Download and install MongoDB Community from the official website: [](https://www.mongodb.com/try/download/community).  
+It is recommended to create a new database and user via MongoDB Compass. Add the database name and credentials to the \`application.properties\` or \`application.yml\` file.
 
-### Installation
+### Installation Steps
 
 1. **Clone the repository**:
     ```sh
@@ -62,13 +62,16 @@ It is advisable to create a new database and user for the application. You can d
 
 ### Configuration
 
-The application can be configured using the `application.properties` or `application.yml` file located in the `src/main/resources` directory.
+Configure the application in the `src/main/resources/application.properties` (or `application.yml`) file.
+This file controls the connection details, JWT secrets, and other application-specific parameters.
 
-### Authentication System
+### JWT Authentication and Token Management
 
-The application uses a dual token system for authentication:
+The authentication system uses two tokens for security:
 - **authToken**: Used for accessing protected endpoints.
-- **refreshToken**: Stored as a secure cookie and used to generate new `authToken` when it expires. The `refreshToken` is invalidated and regenerated upon use.
+- **refreshToken**: Stored as a secure cookie; it is used to generate a new `authToken` when the current one expires. This token is invalidated after use and regenerated.
+
+Note: Update JWT secrets using the provided `JwtSecretGenerator` utility before deployment.
 
 ### Guide for Users
 
@@ -122,7 +125,7 @@ This project is licensed under the Apache License, Version 2.0. See the [LICENSE
 
 ## Author
 
-- **Tim Niklas Tenger**
+- [**Tim Niklas Tenger**](https://www.linkedin.com/in/tim-niklas-tenger-5b44231b4/)
 
 ## Contributing
 
