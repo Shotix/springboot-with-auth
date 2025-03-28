@@ -6,4 +6,5 @@
                  name="springboot-with-auth" start-page="README.md">
 
     <toc-element topic="README.md"/>
+    <toc-element topic="2fa-workflow.md"/>
 </instance-profile>
