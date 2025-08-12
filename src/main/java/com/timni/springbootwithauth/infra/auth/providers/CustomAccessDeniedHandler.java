@@ -25,10 +25,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     private static String getResponseString(AccessDeniedException accessDeniedException) {
 
-        return switch (accessDeniedException) {
-            case InvalidCsrfTokenException _ -> "Invalid CSRF token";
-            default -> "Access Denied";
-        };
+        return "Access Denied";
+        
     }
 }
 

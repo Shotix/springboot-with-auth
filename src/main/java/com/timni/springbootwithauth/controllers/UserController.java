@@ -72,12 +72,10 @@ public class UserController extends BaseController<
         user.setPassword(authenticationService.hashPassword(user.getPassword()));
         User createdUser = service.create(user);
 
-        // Generate both access and refresh tokens.
         AuthenticationResponse authResponse = authenticationService.authenticate(createdUser);
 
         addRefreshTokenCookie(response, authResponse.refreshToken());
 
-        // Return only the access token in the JSON response.
         return ResponseBuilder.created("User registered successfully", authResponse.accessToken());
     }
 
@@ -97,12 +95,10 @@ public class UserController extends BaseController<
             throw new UsernameNotFoundException("user.login.credentials.invalid");
         }
 
-        // Generate both tokens.
         AuthenticationResponse authResponse = authenticationService.authenticate(user);
 
         addRefreshTokenCookie(response, authResponse.refreshToken());
 
-        // Return the access token in the response body.
         return ResponseBuilder.success("Login successful", authResponse.accessToken());
     }
 
@@ -112,6 +108,17 @@ public class UserController extends BaseController<
         log.info("[request] get authenticated user");
 
         return ResponseBuilder.success("User retrieved successfully", mapper.toResponse(service.getAuthenticatedUser(SecurityContextHolder.getContext().getAuthentication())));
+    }
+
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<String>> logout(HttpServletResponse response) {
+        log.info("[request] logout");
+
+        addRefreshTokenCookie(response, null);
+
+        return ResponseBuilder.success("Logout successful", "User logged out successfully");
     }
 
 

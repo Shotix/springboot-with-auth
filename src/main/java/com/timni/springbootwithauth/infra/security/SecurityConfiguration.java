@@ -64,7 +64,7 @@ public class SecurityConfiguration {
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         configuration.applyPermitDefaultValues();
-        return _ -> configuration;
+        return config -> configuration;
     }
 
     @Bean
